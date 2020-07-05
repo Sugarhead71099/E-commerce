@@ -1,0 +1,4 @@
+insert into ecommerce_user(user_id, username, password, email, address, phone) values(1, 'username-1', 'password-1', 'user1@1.com', 'address - 1', '1111111111');
+insert into ecommerce_user(user_id, username, password, email, address, phone) values(2, 'username-2', 'password-2', 'user2@2.com', 'address - 2', '2222222222');
+insert into ecommerce_user(user_id, username, password, email, address, phone) values(3, 'username-4', 'password-4', 'user3@3.com', 'address - 3', '3333333333');
+insert into ecommerce_user(user_id, username, password, email, address, phone) values(4, 'username-4', 'password-4', 'user4@4.com', 'address - 4', '4444444444');
