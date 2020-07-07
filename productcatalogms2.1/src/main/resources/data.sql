@@ -1,0 +1,1 @@
+create table CartIdGenerator(uniqueCartId number);
