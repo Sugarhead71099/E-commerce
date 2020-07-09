@@ -1,15 +1,24 @@
 package com.catalog.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
 
 import com.catalog.model.CartIdGenerator;
+import com.catalog.model.Product;
 import com.catalog.model.User;
 import com.catalog.service.CartIdGeneratorService;
 import com.catalog.service.RabbitMQSender;
+
+import antlr.collections.List;
 
 
 @RestController
@@ -22,7 +31,7 @@ public class RabbitMQController {
 	@Autowired
 	CartIdGeneratorService cartIdGeneratorService;
 	
-	User activeUser = null;
+	//User activeUser = null;
 
 	
 	int cartId = -1; // this is a dummy cart id, which will actually be a unique number
@@ -41,7 +50,7 @@ public class RabbitMQController {
 		//System.out.println("enter rabbit send controller");
 		
 		String userProductStr = new String();
-		userProductStr += /*username*/ activeUser.getUsername();
+		userProductStr += /*username*/ "dummy" ;//activeUser.getUsername(); // this no longer matters since we modified it to be stateless
 		userProductStr += "," + productId; // comma is delimiter
 		userProductStr += "," + name;
 		userProductStr += "," + price; //productId, name, and price are attributes of product
@@ -54,18 +63,7 @@ public class RabbitMQController {
 	}
 	
 	
-	// receive the active user using resttemplate
-		@RequestMapping(value = "/receivingUser"/*, method = RequestMethod.GET*/)
-		public void genCartForUser() {
-
-			// add code here to receive the active user using a resttemplate
-			User user = new User(); // this is dummy for use until resttemplate added
-			
-			// generate a new cart id for the active user
-			CartIdGenerator cGen = new CartIdGenerator();
-			cartId = cartIdGeneratorService.createCartIdGenerator(cGen);
-			System.out.println("cart id gen supposedly saved to db");
-			System.out.println("cart id is " + cartId);
-			
-		}
+	
+		
+		
 }

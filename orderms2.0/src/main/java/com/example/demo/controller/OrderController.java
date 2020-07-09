@@ -1,68 +1,41 @@
 package com.example.demo.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.model.OrderItems;
 import com.example.demo.model.Product;
-import com.example.demo.model.User;
+
+import com.example.demo.model.UtilClass;
 import com.example.demo.service.OrderItemsService;
+import com.example.demo.service.RabbitMQConsumer;
 
 @Controller
 public class OrderController {
 	// this ms will need to receive a user and a product and a quantity, then
 	// save that as an order items object. it has a database of all orderitems
-	
-	// it should also be able to send all orderitems in the cart of the current user
-	// to the cart service 
+	// its RabbitMQConsumer service does some passive listening action
 	
 	@Autowired
 	OrderItemsService orderItemsService;
 	
-	static int orderItemId = 1;
-	
-	// dummies for test
-	User receivedUser = new User();
-	Product receivedProduct = new Product();
-	int receivedQuantity = 5;
 	
 	
-	
-	// controller to add new order item to the database
-	@RequestMapping("/addItem")
-	public String addItem()
-	{
-		
-		
-		// elaborating on dummies
-		receivedUser.setAddress("a");
-		receivedUser.setEmail("a");
-		receivedUser.setPassword("hi");
-		receivedUser.setPhone(123);
-		receivedUser.setUserId(89);
-		receivedUser.setUsername("a");
-		receivedProduct.setInfo("hi");
-		receivedProduct.setName("name");
-		receivedProduct.setPrice(3);
-		receivedProduct.setProductId(1);
-		
-		
-		OrderItems toAdd = new OrderItems();
-		toAdd.setProduct(receivedProduct);
-		toAdd.setUser(receivedUser);
-		toAdd.setQuantity(receivedQuantity);
-		toAdd.setOrderNum(1);
-		toAdd.setOrderId(orderItemId);
-		orderItemId++;
-		//System.out.println(receivedUser);
-		//System.out.println(receivedProduct);
-		//System.out.println(toAdd);
-		orderItemsService.getAllOrderItems();
-	
-		orderItemsService.createOrderItems(toAdd); //throwing null ptr exception
-		
-		return "/";
+	//for when the user wants to go to cart and view all items in their order. then we send
+	// items to cart ms using resttemplate
+	@RequestMapping("/goToCart")
+	public @ResponseBody List<OrderItems>  goToCartMS() {
+	    List<OrderItems> parentType = orderItemsService.getAllOrderItems();
+		return   parentType.stream().filter(item -> item.getOrderNum() == UtilClass.getCurrentCartId()).collect(Collectors.toList());
+	 
 	}
+	
 	
 }

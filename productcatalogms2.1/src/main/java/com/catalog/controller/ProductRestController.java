@@ -1,7 +1,10 @@
 package com.catalog.controller;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,13 +12,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.catalog.model.CartIdGenerator;
 import com.catalog.model.Product;
 import com.catalog.service.CartIdGeneratorService;
 
-import antlr.collections.List;
+
 
 @RestController
 public class ProductRestController {
@@ -50,5 +54,29 @@ public class ProductRestController {
 		return allProducts;
 	}
 	
+	// receives a list of all products
+	@RequestMapping(value = "/allAvailableProducts", method = RequestMethod.GET)
+	public List<Product> receiveProducts() {
+
+		String urlOfReceipt = "http://localhost:8010/productms/products";
+		RestTemplate restTemplate = new RestTemplate();
+		
+		try {
+			ResponseEntity<List<Product>> response = restTemplate.exchange(
+					urlOfReceipt, 
+					HttpMethod.GET,
+					null,
+					new ParameterizedTypeReference<List<Product>>() {});
+			if(response != null && response.hasBody()){
+				allProducts = (ArrayList<Product>) response.getBody(); //make session attribute, possibly
+				System.out.println("supposedly received");
+			}
+		} catch (RestClientException e) {
+			
+			e.printStackTrace();
+		} 
+		
+		return allProducts;
+	}
 	
 }

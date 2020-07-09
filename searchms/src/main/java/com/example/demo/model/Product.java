@@ -34,6 +34,14 @@ public class Product {
 	public String toString() {
 		return "Product [productId=" + productId + ", name=" + name + ", info=" + info + ", price=" + price + "]";
 	}
+	public Product(String name, String info, int price) {
+		super();
+		this.name = name;
+		this.info = info;
+		this.price = price;
+	}
+	
+	
 	
 	
 }

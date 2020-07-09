@@ -3,6 +3,8 @@ package com.example.demo.model;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import com.sun.istack.Nullable;
@@ -11,12 +13,12 @@ import com.sun.istack.Nullable;
 public class OrderItems {
 
 	@Id
+	@GeneratedValue (strategy = GenerationType.AUTO)
 	int orderId; // a unique item in an order 
 	@Nullable
 	int orderNum; // order items with the same orderNum are in the same cart
 
-	@Embedded
-	User user;
+	
 
 	@Embedded
 	Product product;
@@ -33,12 +35,7 @@ public class OrderItems {
 	public void setOrderNum(int orderNum) {
 		this.orderNum = orderNum;
 	}
-	public User getUser() {
-		return user;
-	}
-	public void setUser(User user) {
-		this.user = user;
-	}
+	
 	public Product getProduct() {
 		return product;
 	}
@@ -53,7 +50,7 @@ public class OrderItems {
 	}
 	@Override
 	public String toString() {
-		return "OrderItems [orderId=" + orderId + ", orderNum=" + orderNum + ", user=" + user + ", product=" + product
+		return "OrderItems [orderId=" + orderId + ", orderNum=" + orderNum +  ", product=" + product
 				+ ", quantity=" + quantity + "]";
 	}
 	
